@@ -136,8 +136,7 @@ public class UserController {
 
     @RequestMapping(value = "/resetPass", method = RequestMethod.POST)
     @ApiOperation(value = "重置密码")
-    public Result<Object> resetPass(@RequestParam String[] ids) {
-
+    public Result<Object> resetPass(@RequestParam String[] ids, @RequestParam String newPws) {
         for (String id : ids) {
             User u = userService.get(id);
             // 在线DEMO所需

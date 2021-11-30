@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface AnnounceDao extends XbootBaseDao<Announce,String> {
     List<Announce> findAll();
-    Boolean update();
 }

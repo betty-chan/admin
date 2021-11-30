@@ -1,5 +1,6 @@
 package cn.exrick.xboot.modules.base.serviceimpl;
 
+import cn.exrick.xboot.base.XbootBaseDao;
 import cn.exrick.xboot.modules.base.dao.AnnounceDao;
 import cn.exrick.xboot.modules.base.service.AnnounceService;
 import cn.exrick.xboot.modules.base.entity.Announce;
@@ -15,8 +16,14 @@ import java.util.List;
 @Service
 @Transactional
 public class AnnounceServiceImpl implements AnnounceService {
+
     @Autowired
     private AnnounceDao announceDao;
+
+    @Override
+    public XbootBaseDao<Announce, String> getRepository() {
+        return announceDao;
+    }
 
     @Override
     public List<Announce> get() {

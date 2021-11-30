@@ -3,15 +3,13 @@ package cn.exrick.xboot.modules.base.controller.common;
 import cn.exrick.xboot.common.redis.RedisTemplateHelper;
 import cn.exrick.xboot.common.utils.CreateVerifyCode;
 import cn.exrick.xboot.common.utils.ResultUtil;
+import cn.exrick.xboot.common.utils.emailUtil;
 import cn.exrick.xboot.common.vo.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -50,5 +48,15 @@ public class CaptchaController {
         CreateVerifyCode vCode = new CreateVerifyCode(116, 36, 4, 10, code);
         response.setContentType("image/png");
         vCode.write(response.getOutputStream());
+    }
+
+    @RequestMapping(value = "/send", method = RequestMethod.GET)
+    @ApiOperation(value = "邮件发送验证码")
+    public Result<Object> sendCaptcha (@RequestParam String username) throws Exception {
+        String code = new CreateVerifyCode().randomStr(4);
+        // 缓存验证码
+        redisTemplate.set(username, code, 2L, TimeUnit.MINUTES);
+        emailUtil.sendEmail(username,"找回密码",code);
+        return ResultUtil.data("true");
     }
 }
